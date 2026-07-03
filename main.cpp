@@ -1,8 +1,11 @@
 #include "Paint.h"
 #include "raylib.h"
 #include <vector>
+#include <stack>
 #define RAYGUI_IMPLEMENTATION
 #include "include/raygui/src/raygui.h"
+#include <tuple>
+#include "UndoStack.h"
 //#include "DrawScope.h"
 
 int main() {
@@ -22,9 +25,14 @@ int main() {
     float brushThickness = 5;
     Vector2 previousMousePos{};
     bool wasDrawing = false;
+    UndoStack undoHelper;
 
     while(!WindowShouldClose()) {
         Vector2 currentMousePos = GetMousePosition();
+
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            undoHelper.addToUndoStack(LoadImageFromTexture(canvas.texture));
+        }
         
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             BeginTextureMode(canvas);
@@ -32,8 +40,8 @@ int main() {
                 DrawLineEx(previousMousePos, currentMousePos, brushThickness*2, brushColor);
             }
             DrawCircleV(currentMousePos, brushThickness, brushColor);
-
             EndTextureMode();
+
             previousMousePos = currentMousePos;
             wasDrawing = true;
         } else {
@@ -44,6 +52,16 @@ int main() {
             BeginTextureMode(canvas);
                 ClearBackground(RAYWHITE);
             EndTextureMode();
+        }
+
+        if (IsKeyPressed(KEY_R)) {
+            if (undoHelper.getStack().size() > 0) {
+                BeginTextureMode(canvas);
+                    ClearBackground(RAYWHITE);
+                    Texture2D prevCanvas = LoadTextureFromImage(undoHelper.getAndPopTop());
+                    DrawTexture(prevCanvas,0,0,WHITE);
+                EndTextureMode();
+            }
         }
 
         BeginDrawing();
@@ -64,10 +82,14 @@ int main() {
             if (GuiButton(Rectangle{600, 80, 100, 30}, "Red")) {
                 brushColor = RED;
             }
+            if (GuiButton(Rectangle{600,110,100,30}, "Green")) {
+                brushColor = GREEN;
+            }
             GuiSliderBar(Rectangle{600, 150, 100, 30}, "Brush Size", NULL, &brushThickness, 1, 10);
         EndDrawing();
     }
     CloseWindow();
+
 
     return 0;
 };
