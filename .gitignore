@@ -2,3 +2,5 @@
 DrawScope.h
 main.exe
 include/
+paint.cpp
+paint.h
