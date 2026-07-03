@@ -1,27 +1,45 @@
 #include "Paint.h"
 #include "raylib.h"
 #include <vector>
+//#include "DrawScope.h"
 
 int main() {
-    //Paint painter;
-    //painter.print();
-    InitWindow(800, 600, "Paint Program");
+    const int screenWidth = 800;
+    const int screenHeight = 600;
     SetTargetFPS(120);
-    std::vector<Vector2> mousePositions;
+
+    InitWindow(screenWidth, screenHeight, "Paint Program");
+    RenderTexture2D canvas = LoadRenderTexture(screenWidth, screenHeight);
+
+    BeginTextureMode(canvas);
+        ClearBackground(RAYWHITE);
+    EndTextureMode();
+    
 
     while(!WindowShouldClose()) {
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            mousePositions.push_back(GetMousePosition());
+            BeginTextureMode(canvas);
+                DrawCircleV(GetMousePosition(), 10, RED);
+            EndTextureMode();
+        }
+        if (IsKeyPressed(KEY_C)) {
+            BeginTextureMode(canvas);
+                ClearBackground(RAYWHITE);
+            EndTextureMode();
         }
 
         BeginDrawing();
-        for (Vector2 pos : mousePositions) {
-            DrawCircle(pos.x, pos.y, 10, RED);
-        }
+            ClearBackground(RAYWHITE);
 
-        ClearBackground(RAYWHITE);
-        DrawText("Raylib test", 300, 280, 30, BLACK);
-        EndDrawing();   
+            DrawTextureRec(
+                canvas.texture,
+                Rectangle{0, 0, (float)canvas.texture.width, -(float)canvas.texture.height},
+                Vector2{0,0},
+                RAYWHITE);
+
+            DrawText("Hold L-click to draw", 20, 20, 10, RED);
+            DrawText("Press C to clear", 20, 30, 10, RED);
+        EndDrawing();
     }
     CloseWindow();
 
