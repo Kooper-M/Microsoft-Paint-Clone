@@ -1,0 +1,6 @@
+WHAT I LEARNED:
+-There's such a thing as over engineering a program. I had the program running and then added a bunch of objects but then it got confusing. I think a lof these classes could just be structs. If a class is just holding a few data members, I will probably refactor it into a struct.
+
+-Raylib is probably more suited for game creation, for my next application I'm gonna learn qt. 
+
+-When we need to augment something I need to pass the reference, I got stuck when trying to change the canvas class because I wasn't passing the reference and only passing a copy. 
