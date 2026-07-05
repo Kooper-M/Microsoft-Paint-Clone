@@ -1,8 +1,9 @@
 #pragma once
 #include <memory>
 #include <raylib.h>
+#include "Brush.h"
 class Gui {
     public:
-        void drawGui(Color&, RenderTexture2D&, float&);
+        void drawGui(Brush&, RenderTexture2D&);
     
 };
