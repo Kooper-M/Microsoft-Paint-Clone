@@ -2,19 +2,23 @@
 #include "raylib.h"
 #pragma once
 
-struct undoInfo {
-    bool line;
-    Vector2 prevMousePos;
-    Vector2 currentPos;
-    int brushSize;
-};
-
 class UndoStack {
     public:
         void addToUndoStack(Image);
-        std::stack<Image> getStack();
-        Image getAndPopTop();
+        void addToRedoStack(Image); 
+        void clear();
+        void clearUndoStack();
+        void clearRedoStack();
+        bool undoStackEmpty();
+        bool redoStackEmpty();
+    
+        std::stack<Image> getUndoStack();
+        std::stack<Image> getRedoStack();
+        Image getAndPopUndoTop();
+        Image getAndPopRedoTop();
+        
 
     private:
         std::stack<Image> undoStack_;
+        std::stack<Image> redoStack_;
 };

@@ -1,18 +1,25 @@
 #pragma once
 #include "raylib.h"
-class Brush {
-    public:
-        Brush();
-        Brush(Color color, float thickness);
-        void setThickness(float);
-        //void changeBrush();
-        void setColor(Color);
-        Color getColor() const;
-        float getThickness() const; 
+struct Brush {
+    Color color;
+    Color prevColor;
+    bool isEraser;
+    float thickness;
+    Brush(Color colorInit, float thicknessInit) : color(colorInit), prevColor(colorInit), isEraser(false), thickness(thicknessInit) {};
 
-    private:
-        Color color_;
-        float thickness_;
-        
+    void switchToEraser() {
+        isEraser = true;
+        thickness += 1;
+        prevColor = color;
+        color = RAYWHITE;
+    }
 
+    void switchToBrush() {
+        isEraser = false;
+        thickness -= 1;
+        if (thickness < 1) {
+            thickness = 1;
+        }
+        color = prevColor;  
+    }
 };

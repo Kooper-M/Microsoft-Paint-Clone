@@ -7,7 +7,8 @@ class Canvas {
         int getWidth() const;
         int getHeight() const;
         void init();
-        RenderTexture2D& getTexture();
+        Texture getTexture() const;
+        RenderTexture2D& get2DTexture();
         void unload();
         void drawCanvas();
     private:

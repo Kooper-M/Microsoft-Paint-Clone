@@ -13,7 +13,9 @@ int Canvas::getWidth() const {return width_;}
 
 int Canvas::getHeight() const {return height_;}
 
-RenderTexture2D& Canvas::getTexture() {return canvas_;}
+Texture Canvas::getTexture() const {return canvas_.texture;}
+
+RenderTexture2D& Canvas::get2DTexture() {return canvas_;}
 
 void Canvas::init() {
     canvas_ = LoadRenderTexture(width_, height_);
